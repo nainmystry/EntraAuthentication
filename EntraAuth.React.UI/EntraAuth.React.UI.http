@@ -1,0 +1,6 @@
+@EntraAuth.React.UI_HostAddress = http://localhost:5298
+
+GET {{EntraAuth.React.UI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

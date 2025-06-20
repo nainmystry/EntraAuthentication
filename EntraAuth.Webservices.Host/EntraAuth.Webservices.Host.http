@@ -1,0 +1,6 @@
+@EntraAuth.Webservices.Host_HostAddress = http://localhost:5139
+
+GET {{EntraAuth.Webservices.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
