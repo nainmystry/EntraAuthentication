@@ -3,14 +3,6 @@
 const clientId = import.meta.env.VITE_AZURE_CLIENT_ID
 const authority = import.meta.env.VITE_AZURE_TENANT_ID
 
-export const msalPopupConfig = {
-    popupWindowAttributes: {
-        width: 600,
-        height: 800,
-        left: 100,
-        top: 100
-    }
-};
 
 export const msalConfig: Configuration = {
     auth: {
@@ -29,7 +21,7 @@ export const msalConfig: Configuration = {
                 if (containsPii) return;
                 console.log(`MSAL: ${message} ${level}`);
             },
-            logLevel: LogLevel.Verbose
+            logLevel: LogLevel.Info
         }
     }
 }
