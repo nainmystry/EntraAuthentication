@@ -24,4 +24,6 @@ export const LoginRedirect = () => {
 
         initiateLogin();
     }, [instance]);
+
+    return null;
 }

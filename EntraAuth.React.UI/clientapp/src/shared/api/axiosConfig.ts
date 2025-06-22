@@ -6,7 +6,7 @@ import { loginRequest, msalConfig, silentRequest } from '../../auth/authConfig';
  * Axios instance with base configuration to use it for API calls.
  */
 const apiClient = axios.create({
-    baseURL: "somebaseurl", //get from env constants or appsettings.
+    baseURL: import.meta.env.VITE_API_BASE_URL, //get from env constants or appsettings.
     timeout: 10000,
     headers:{
         'Content-Type': 'application/json'

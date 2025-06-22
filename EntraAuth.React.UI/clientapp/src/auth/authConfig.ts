@@ -1,12 +1,11 @@
 ﻿import { BrowserCacheLocation, type Configuration, LogLevel } from "@azure/msal-browser";
 
-
 export const msalConfig: Configuration = {
     auth: {
-        clientId: "enter client-id", //will get this after app-registration
-        authority: "", //will get this after app-registration
-        redirectUri: window.location.origin, // or give only / as path
-        postLogoutRedirectUri: window.location.origin // or give only / as path
+        clientId: import.meta.env.VITE_AZURE_CLIENT_ID, //will get this after app-registration, can take this value from appconstants or appsettings
+        authority: `https://login.microsoftonline.com/${import.meta.env.VITE_AZURE_TENANT_ID}`, //will get this after app-registration, can take this value from appconstants or appsettings
+        redirectUri: window.location.origin, // or give only / as path or update the HomeComponent Path
+        //postLogoutRedirectUri: window.location.origin // or give only / as path or route to login (optional)
     },
     cache: {
         cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -16,7 +15,7 @@ export const msalConfig: Configuration = {
         loggerOptions: {
             loggerCallback: (level, message, containsPii) => {
                 if (containsPii) return;
-                console.log(`MSAL: ${message}`);
+                console.log(`MSAL: ${message} ${level}`);
             },
             logLevel: LogLevel.Info
         }
