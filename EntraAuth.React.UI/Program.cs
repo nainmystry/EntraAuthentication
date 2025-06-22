@@ -14,9 +14,24 @@ namespace EntraAuth.React.UI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Required for production builds to locate the static files folder. wwwroot is default, with AddSpaStaticFiles() we can update the static files folder.
+            builder.Services.AddSpaStaticFiles(config => 
+            {
+                config.RootPath = "wwwroot";
+            });
+
+            //the AddHsts() middleware enforces HTTP Strict Transport Security (HSTS)
+            builder.Services.AddHsts(options =>
+            {
+                options.Preload = true; // Submit to browser preload lists
+                options.IncludeSubDomains = true; // Protect subdomains
+                options.MaxAge = TimeSpan.FromDays(30); // Cache duration
+            });
+
             var app = builder.Build();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseRouting();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -29,8 +44,9 @@ namespace EntraAuth.React.UI
 
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.UseSpa(spa => { });
 
             app.Run();
         }
