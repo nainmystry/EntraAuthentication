@@ -1,6 +1,7 @@
 import { useMsal } from "@azure/msal-react"
 import { useEffect } from "react";
 import { loginRequest } from "./authConfig";
+import { setActiveAccount } from "./authUtils";
 
 
 /**
@@ -16,14 +17,20 @@ export const LoginRedirect = () => {
          */
         const initiateLogin = async () => {
             try {
-                await instance.loginRedirect(loginRequest);
+                //await instance.loginRedirect(loginRequest);
+                const response = await instance.loginPopup({
+                    scopes: ["User.Read"]                    
+                });
+                setActiveAccount(response.account);
             } catch (error) {
                 console.error('Login redirect failed', error);
+                instance.loginRedirect(loginRequest);
             }
         };
 
         initiateLogin();
     }, [instance]);
 
-    return null;
+
+    return (<h1>Login Redirect Page</h1>);
 }

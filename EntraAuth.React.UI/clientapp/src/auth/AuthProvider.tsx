@@ -1,6 +1,7 @@
-﻿import { PublicClientApplication } from '@azure/msal-browser';
+﻿import { type ReactNode } from 'react';
+
 import { MsalProvider } from '@azure/msal-react';
-import { type ReactNode } from 'react';
+import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './authConfig';
 
 /**
