@@ -7,7 +7,7 @@ const authority = import.meta.env.VITE_AZURE_TENANT_ID
 export const msalConfig: Configuration = {
     auth: {
         clientId: clientId, //will get this after app-registration, can take this value from appconstants or appsettings
-        authority: `https://login.microsoftonline.com/${authority}`, //will get this after app-registration, can take this value from appconstants or appsettings
+        authority: "https://login.microsoftonline.com/${authority}", //will get this after app-registration, can take this value from appconstants or appsettings
         redirectUri: "/", // or give only / as path or update the HomeComponent Path
         postLogoutRedirectUri: "/" // or give only / as path or route to login (optional)
     },
@@ -21,7 +21,7 @@ export const msalConfig: Configuration = {
                 if (containsPii) return;
                 console.log(`MSAL: ${message} ${level}`);
             },
-            logLevel: LogLevel.Info
+            logLevel: LogLevel.Verbose
         }
     }
 }

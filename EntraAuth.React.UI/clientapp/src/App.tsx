@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import './App.css'
 import WeatherForeCast from './weather/weather-component'
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from '@azure/msal-react'
@@ -7,12 +7,11 @@ import { loginRequest } from './auth/authConfig'
 import { setActiveAccount } from './auth/authUtils'
 
 function App() {
-
     const { instance, accounts } = useMsal();
 
     useEffect(() => {
         const authenticate = async () => {
-            await instance.initialize(); // ? Wait for MSAL to initialize
+            await instance.initialize(); // ✅ Wait for MSAL to initialize
 
             if (accounts.length > 0) {
                 setActiveAccount(accounts[0]);
