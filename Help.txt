@@ -1,0 +1,65 @@
+Steps to run docker locally.
+
+cd to docker file directory and run below cmd, this cmd creates image.
+docker build -t wf-fullstack-app .
+
+run the image that creates container.
+docker run -p 8080:80 wf-fullstack-app
+
+
+To deploy app via docker on azure,
+deploy image on ACR for that follow below steps
+
+If resource group not already created, create one.
+Powershell commands.
+
+creating resource group
+az group create --name "weatherforecastapp-rg" --location "eastus"
+
+
+then create Container Registry "myacrname" should be globally unique & check the SKU
+az acr create --name "myacrname" --resource-group "my-rg" --sku Basic
+
+then create a appservice plan, in same resource group, check the SKU
+az appservice plan create --name my-app-plan --resource-group my-rg --is-linux --sku B1
+
+then create the Web App (Linux) to run your Docker container 
+az webapp create \
+  --resource-group my-rg \
+  --plan my-app-plan \
+  --name my-container-app \
+  --deployment-container-image-name myacrname.azurecr.io/weatherapp
+
+
+-------------------
+Configured Azure CI/CD pipeline.
+Step 1: Create a Pipeline (CI)
+Go to Pipelines > Create Pipeline
+Choose your repository (GitHub or Azure Repos)
+After selecting your GitHub repo, Azure shows templates like:
+"Docker: Build and push image to ACR"
+"Node.js", ".NET Core", etc.
+select:
+Docker: Build and push an image to Azure Container Registry
+This will:
+Scaffold a working YAML pipeline
+Build your image from a Dockerfile
+Push it to your ACR
+
+Configured Azure DevOps Release pipeline:
+Step 1: Azure App Service Deployment.
+select the one which gives option to choose from Container Registry.
+
+Step 2: 
+Then click on artifact, 
+Select Source Type Azure Container Repository.
+Fill the details. create a service connection if not already created.
+& fill in the other details.
+
+Step 3: 
+Click on Stage, click on Tasks,
+Remove existing task and Add Task "Azure Web App for Containers"
+define app name, image name that needs to be deployed.
+(image name/tag should match to what is build in build pipeline.)
+
+Save the config & good to go.
