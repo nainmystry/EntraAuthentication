@@ -1,0 +1,152 @@
+Gen AI Interview Questions:
+Attention Is All You Need
+
+What is GenAI?
+- AI that generates new content by learning form some data.
+like chat gpt, gemini, midjourney, sora
+
+What are diff types of GenAI solutions are already present?
+What are some popular applications of generative AI in the real world?
+- Text Gen (e.g., ChatGPT, Gemini)
+- Image Gen (e.g., DALL·E, MidJourney)
+- Code Gen (e.g., GitHub Copilot)
+- Audio Gen (e.g., ElevenLabs, Udio)
+- Video Gen (e.g., Sora, Runway)
+
+What are dif index types in Vector DB?
+- Most Accurate but slow
+	- FLAT
+- Less Accurate but faster
+	- HNSW (Hierarchical Navigable Small World)
+	- IVF (Inverted File Index)
+- Least Accurate But Faster
+	-LSH (Locality-Sensitive Hashing)
+	-PQ (Product Quantization)
+
+Any AI Exmaple you have worked on and what problem does it solve?
+	
+Example -
+I have a pdf file which has images & text, and a user is querying and needs answer along with reference - how will you implement this?
+
+What are chunks?
+What is chunking?
+What is vectorization?
+
+what is the latest model from gpt available in market for corporate use?
+
+What is GPT?
+
+What are Vector dimension & Vector Distance Metric
+Dimensions = Size of vector (e.g., 384, 1536).
+Distance Metric = How similarity is calculated (Cosine, Euclidean, etc.).	
+
+
+
+Cosine: Default for embeddings (OpenAI, SBERT).
+Euclidean: Physics/geometry problems.
+Dot Product: Optimized for speed (if pre-normalized).
+
+
+GPT stands for Generative Pre-trained Transformer.
+Generative: It can generate human-like text.
+Pre-trained: It is trained on a large dataset before being fine-tuned for specific tasks.
+Transformer: It uses the Transformer (Decoder) architecture, known for handling sequential data (like language) efficiently.
+
+Transformers are a type of deep learning model
+Transformer Components (decoder-only transformer):
+Token Embedding – Converts input tokens to vectors
+Positional Encoding – Adds order information
+Masked Multi-Head Self-Attention – Looks only at previous tokens (causal)
+Feed Forward Network (FFN) – Processes each token independently
+Layer Normalization – Stabilizes training
+Residual Connections – Helps gradient flow
+Linear + Softmax Head – Outputs next token prediction
+
+Transformers Two Main Architectures:
+Encoder (e.g., BERT) — for understanding
+Decoder (e.g., GPT) — for generating
+Encoder-Decoder (e.g., T5, BART) — for translation, summarization
+
+What is attention Mechanism?
+
+How is Agent different from a RAG?
+
+
+Prompting Strategy
+Strategy	Description	Example Use
+Zero-shot prompting	- Ask a question directly, without giving any example	"Summarize this article."
+One-shot prompting	- Provide one example to guide the model	1 example + new input
+Few-shot prompting	- Give a few examples of the task to set the pattern	3 examples of Q&A before a new question
+Chain-of-thought (CoT) -	Ask the model to "think step by step" for better reasoning	"Let's think step by step..."
+Self-consistency	- Generate multiple reasoning paths and pick the most common answer	Useful in math/logical tasks
+ReAct prompting	- Combine Reasoning + Action (used in Agents)	Think → Search → Answer
+Role prompting	- Ask the model to respond as a specific role or persona	"You are a travel agent..."
+Instruction prompting -Clearly instruct the model what to do (e.g., format, tone)	"List 3 pros and cons, in bullet points."
+Retrieval-Augmented Prompting (RAG) -	Include context from documents before asking	[context chunk] + question
+
+
+How to calculate the cost of running a chat bot?
+
+
+Enabler Questions
+
+What are some challenges associated with training and evaluating generative AI models?
+
+Computational cost: High computational power and hardware requirements for training more complex models.
+Training complexity: Training generative models could be challenging and full of nuances.
+Evaluation metrics: It’s challenging to quantitively assess the quality and diversity of the model outputs.
+Data requirements: Generative models often require massive amounts of data with high quality and diversity. The collection of such data could be time-consuming and expensive.
+Bias and fairness: Unchecked models can amplify the biases present in the training data, leading to unfair outputs.
+
+
+ Generative models include Variational Autoencoders (VAEs) and Generative Adversarial Networks (GANs), whereas discriminative models include logistic regression and support vector machines.
+ 
+ What is F1 Score?
+ metric to measure a model’s accuracy, balancing precision and recall
+ 
+Spam detection / disease diagnosis	≥ 0.8
+Critical safety systems	> 0.9
+General NLP classification	0.7–0.9
+
+AUC - ROC
+Recall - % of actual positives identified correctly
+Precision - % of predicted positives that are correct
+
+R² (R-squared)	% of variance explained by model	Overall model fit
+
+
+Code based
+
+a = [1, 2, 3]
+b = a
+print(a is b)  # True ✅ same object in memory
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+print(a == b)  # True ✅ same content
+print(a is b)  # False ❌ different objects
+
+
+
+Will below work?
+if True:
+    x = 10
+print(x) 
+
+ # ✅ This works
+
+
+[x for x in range(5)]
+print(x) 
+
+ # ❌ NameError in Python 3.x, but not in Python 2.x
+
+XXWhich library do we need in python to implement async methods
+XXimport asyncio
+
+16. What is REPL In Node.Js?
+Read Eval Print Loop or REPL is a simple program that accepts and evaluates commands and prints the results. REPL creates an environment identical to a Linux/Unix shell or a Windows console, wherein you can specify the system and command and respond with the output. Following are the functions performed by the REPL:
+READ – Reads the input offered by the user, parses it into JavaScript data structure, and then stores it in the memory.
+EVAL – Runs the data structure.
+PRINT – Prints the outcome generated once the command is evaluated.
+LOOP – Loops the above command until the user presses Ctrl+C twice.
