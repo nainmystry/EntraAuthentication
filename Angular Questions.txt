@@ -1,0 +1,316 @@
+
+Docker flow
+[Write Dockerfile] --> [Build Docker Image] --> C[Push to Registry] --> D[Pull on Server] --> E[Run Container] --> F{Update Needed?} -- Yes --> A
+															             -- No  --> G[Monitor & Scale]
+
+Example docker file:
+
+FROM node:18
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["npm", "start"]
+
+Docker Commands 
+
+docker start <container_name_or_id>
+docker stop <container_name_or_id>
+docker restart <container_name_or_id>
+
+Rebuild and Restart (After Code Changes)
+docker build -t my-dotnet-image .
+docker stop my-dotnet-api && docker rm my-dotnet-api
+docker run -d -p 8080:80 --name my-dotnet-api my-dotnet-image
+
+Check Container Status
+docker ps -a  # List all containers (running/stopped)
+docker logs my-dotnet-api  # View logs
+
+For Multiple Containers (Docker Compose) If using docker-compose.yml:
+docker-compose up -d  # Start all services
+docker-compose down   # Stop and remove all
+docker-compose restart api-service  # Restart a specific service
+
+Microservices Pattern 
+
+What is SAGA pattern?
+SAGA ensures that either all steps complete successfully, or compensating actions undo previous steps to maintain consistency.
+
+What is choreography & orchestrated pattern?
+1. Choreography (Event-Driven)
+How it works: Each service publishes events when it completes its task, and other services listen and react to these events.
+
+Example - Order Processing:
+Order Service: Creates order → Publishes OrderCreated event
+Payment Service: Listens → Processes payment → Publishes PaymentProcessed event
+Inventory Service: Listens → Updates stock → Publishes StockUpdated event
+
+Pros:
+Decentralized (no single point of failure)
+Services are loosely coupled
+Easy to add new services
+Cons:
+Hard to track overall flow
+Complex error handling (compensating transactions must be triggered by events)
+
+2. Orchestration (Command-Driven)
+How it works: A central coordinator (orchestrator) tells services what to do and when.
+
+Same Example with Orchestrator:
+Orchestrator: Tells Payment Service "Process payment"
+Orchestrator: If successful, tells Inventory Service "Update stock"
+Orchestrator: If any step fails, triggers compensating transactions
+
+Pros:
+Centralized control (easier to understand flow)
+Better error handling (orchestrator manages rollbacks)
+Explicit workflow definition
+Cons:
+Orchestrator becomes a bottleneck
+Tight coupling with orchestrator
+Additional service to maintain
+
+Key Difference:
+Choreography = Like a dance where partners react to each other's moves
+Orchestration = Like a conductor directing musicians when to play
+
+When to Use Which:
+Choreography: Simple flows, when you want maximum decoupling
+Orchestration: Complex flows, when you need strict control and monitoring
+
+
+Angular Change Detection
+- Zone.js
+  Angular uses Zone.js to intercept all async events (click, setTimeout, HTTP calls, etc.) and triggers change detection automatically after these events.
+- Change Detection Cycle
+  When triggered, Angular walks through the component tree from root to leaves.
+
+Default Change detection type is CheckAlways.
+Can be updated to OnPush or CheckOnce.
+
+Checks all bindings ({{ }}, [ ], ( ))
+
+Compares current values with previous values
+
+Updates the DOM if values changed
+
+Angular lifecycle hooks
+Lifecycle Hook		When It Runs				Purpose						Common Use Case
+ngOnChanges		When input properties change		React to input changes				Update derived state when @Input() changes
+ngOnInit		After first ngOnChanges (once)		Initialize component				Fetch initial data, setup subscriptions
+ngDoCheck		On every change detection cycle		Custom change detection 			logic	Manual dirty checking or performance tuning
+ngAfterContentInit	After content (ng-content) is projected	React to projected content initialization	Access @ContentChild after DOM projection
+ngAfterContentChecked	After each content check		React to content changes			Validate projected content state
+ngAfterViewInit		After component’s view/DOM is ready	Access @ViewChild or DOM elements		Initialize third-party libraries (e.g., charts)
+ngAfterViewChecked	After each view check			React to view/DOM updates			Sync with DOM changes (rarely needed)
+ngOnDestroy		Before component destruction		Cleanup resources				Unsubscribe observables, clear timers
+
+
+Key Takeaways:
+For initialization: Use ngOnInit (not the constructor).
+For input changes: Use ngOnChanges / ngDoCheck.
+For DOM access: Use ngAfterViewInit.
+For cleanup: Always use ngOnDestroy.
+
+
+akita, ngRx, rxJs
+1. RxJS (Reactive Extensions for JavaScript)
+What: A library for reactive programming using Observables.
+Use Case: Handling async operations, event streams, and state changes.
+Angular Integration: Built-in (used in HttpClient, Forms, Router).
+
+2. ngRx
+What: A predictable state container (originally from React).
+Use Case: Centralized state management for large apps.
+Angular Integration: Via @ngrx/store (Angular-flavored Redux).
+
+3. Akita
+What: A lightweight state management library (built on RxJS).
+Use Case: Simpler alternative to Redux with less boilerplate.
+Angular Integration: Standalone library.
+
+standalone
+rather than declaring the component, we can directly import the standalone component.
+
+promise vs observable vs subject vs signal
+1. Promise
+What: Single async value (resolves once)
+When to use: One-time async operations (HTTP calls, simple async tasks)
+
+2. Observable (subscribe to get data, can be unsubscribed later)
+What: Stream of multiple values over time
+When to use: Complex async flows, event streams, cancellable operations
+
+3. Subject (more like messaging queue, event bus)
+What: Special Observable (multicast) that can emit values
+When to use: Cross-component communication, manual event triggering
+
+4. Signal (used for storing state of component or properties)
+What: Reactive primitive with automatic dependency tracking
+When to use: State management in components, fine-grained reactivity
+
+managed & unmanaged code csharp
+- Unmanaged code any interaction my application does with the system directly or undirectly like creating a thread or running new process or reading or writing file all of this is unmanaged code
+- Managed code is code managed by the .NET CLR.
+
+dispose vs finalise csharp - Done
+Feature		Dispose()			Finalize()
+Call by		Developer (manual)		GC (automatic)
+When		Deterministic (known time)	Non-deterministic (unknown time)
+Resources	Managed + Unmanaged		Unmanaged only
+Performance	Fast				Slower (GC overhead)
+
+pipes
+pipes transform data in templates
+- Built in Pipes (Uppercase, datetime, json (strinified json))
+  <p>{{ 'hello' | uppercase }}</p> //HELLO
+
+- Custom Pipes 
+  Reverse String
+  @Pipe({name: 'ReverseString'})
+  export class ReverseStringPipe implements PipeTransform
+  {
+    transform(value: string) : string{
+    return value.split('').reverse().join('');
+    }
+  }
+
+- Pure & Impure Pipes
+  Pure Pipe - Only recalculates when the primitive input value or object reference changes
+  eg:  <p>{{ 'hello' | uppercase }}</p> //It will be executed only when string value changes
+
+  Impure pipes - updates on every time with change detection cycle
+  usecase - Filtering/sorting dynamic arrays
+
+
+angular methods				
+Method - find()		
+What It Does - Returns the first element that satisfies the condition	
+Output - Single element or undefined	
+When to Use - When you need to find one matching item in an array
+
+filter()	
+Returns all elements that satisfy the condition	
+New array of matching elements	
+When you need multiple matches
+
+map()	
+Transforms each element of the array	
+New array of transformed elements	
+Data transformation (e.g., API response mapping)
+
+findIndex()	
+Returns the index of the first element that satisfies the condition	
+Index number or -1	
+When you need the position of an item
+
+slice()	
+Returns a shallow copy of a portion of an array	
+New array with selected elements	
+When you need a subset of an array (pagination)
+
+splice()	
+Changes array by adding/removing elements at specific index	
+Array of removed elements (mutates original)	
+When you need to modify an array in-place
+
+reduce()	
+Accumulates values from an array into a single value	
+Final accumulated value	
+Summing values or complex aggregation
+
+filetypes and functions of those files.
+- angular.json - Main config for angular cli, build, serve, etc command goes here.
+- package.json - all npm dependencies are available here.
+  types of dependencies 
+  - dependencies - if not proper may break the app. eg: angular/core
+  - devdependencies - required in development phase only. eg:- angular/cli
+- tslint.json - typescript compiler config - eslint version and all
+
+webpack
+- Transpilation (typescript compiler)
+- Module binding
+- Static Assets handling
+- Minification & optimization
+- Removing unused code from tree structure.
+
+Auth Guard is a service.
+Once we implement the service, we can use it in route modules
+
+Angular Services
+lifecycle of services
+singleton or not
+- If @injectible & providedIn: root - singleton service
+- If @NgModule & providers - [Service] - new instance everytime.
+
+
+route guard - Done
+CanActivate: Controls if a route can be activated
+CanActivateChild: Controls if child routes can be activated
+CanDeactivate: Controls if a user can leave a route
+CanLoad: Controls if a lazy-loaded module can be loaded
+Resolve: Pre-fetches data before route activation
+
+
+how to use - Done
+implement a route guard, load children - Done
+CanLoad prevents the entire module from being downloaded
+CanActivate downloads the module but prevents route activation
+
+import {Injectible} from '@angular/core'
+
+import {CanLoad, Router} from '@angular/router'
+
+import {AuthService} from './auth-service'
+
+@Injectible({
+'providedIn': root
+})
+export class CanLoadAuthGuard implements CanLoad
+{
+constructor(private authservice : AuthService, private router: Router) {}
+
+canLoad():boolean
+{
+ if(this.authservice.isLoggedIn == true)
+{
+return true;
+}
+
+this.router.navigate(['/login']);
+return false;
+}
+
+
+}
+
+
+import {CanLoadAuthGuard} from './auth-load-guard';
+import {Routes, RouterModule} from '@angular/router'
+import {NgModule} from '@angular/core'
+
+const routes: Routes = [
+{
+path:'admin',
+loadchildren:() => import('./admin/admin-module').then(m => m.AdminModule);
+CanLoad: [CanLoadAuthGuard]
+},
+{
+path:'dashboard',
+component: dashboardcomponent,
+canActivateChild: [CanActivateAuthGuard],
+children: [
+	{path:'users', component: ManageUserComponent},
+	{path:'prodct', component: ManageProductComponent},
+	{path: '', redirectTo: 'users', pathmatch: 'full'}
+]
+}
+];
+
+
+@ngModule({
+imports: [RouterModule.forRoot(routes),
+exports: [RouterModule]]
+})
+export class AppRouterModule{}

@@ -1,0 +1,49 @@
+AI Agents
+
+
+- Python Flask App
+
+- start wsgi
+- app routes middleware
+
+
+
+Invoking crew ai
+- Needs LLM (crew ai object), ModelDetails ()
+- getting input & output file path
+- Fetching usecase details to check if this is a agentic step(internal)
+- getting tool details/agents list 
+- create output directory
+- give description & expected output details
+
+define agent
+- create a agent object 
+   Creating the agents
+	- import agents based on requirement
+	- create a agent define (role, goal, backstory, tools, llm)
+
+
+- defining the manager (by default first one is manager) & task agents (task agents perform the actions and give output)
+
+define task
+- define task (description & expectedoutput)
+this defined task will be assigned to task_agents
+
+initialize crew and kickoff (we get the raw output and tasks based output as well, we get the json output also)
+- intializing the crew ai process with task, task agents, process (hierarchial, sequential),manager agent
+- crew.kickoff() executes the crew process.
+
+
+
+
+crew is task oriented structured format, 
+autogen gives more control to LLM, AI to do negotiations and give output.
+
+##########
+how does quasar work & which vectorDB are we using internally?
+
+pandas - Handles structured data (DataFrames, CSV, Excel, SQL, etc.).
+numpy - Works with arrays, matrices, and mathematical operations
+scikit-learn - Provides ML algorithms (Regression, Classification, Clustering, etc.).
+Matplotlib - Creates graphs, charts, and plots.
+Seaborn - Built on Matplotlib, used for statistical plots.
